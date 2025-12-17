@@ -5,7 +5,7 @@ def create_app():
     app = Flask(__name__)
 
     allowed_origins = [
-        "https://volaplace.vercel.app",  # vercel URL
+        "volaplace-ten.vercel.app",  # vercel URL
         "http://localhost:3000", # for local development
     ]
     CORS(app,origins=allowed_origins)
