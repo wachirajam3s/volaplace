@@ -31,7 +31,8 @@ def create_app():
     # import models inside factory.
     # this prevents circular imports and registers models with SQLAlchemy
     with app.app_context():
-        from . import models 
+        from . import models
+        db.create_all()
 
     # simple routes.
     @app.route('/', methods=['GET'])
