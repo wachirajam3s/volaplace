@@ -1,8 +1,8 @@
-"""add check-in/out columns to roster
+"""Initial clean migration
 
-Revision ID: 65920872ea63
+Revision ID: e93b26395f15
 Revises: 
-Create Date: 2025-12-17 18:26:25.925854
+Create Date: 2025-12-18 01:19:22.093467
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '65920872ea63'
+revision = 'e93b26395f15'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,7 +36,7 @@ def upgrade():
     sa.Column('base_hourly_rate', sa.Float(), nullable=True),
     sa.Column('bonus_per_beneficiary', sa.Float(), nullable=True),
     sa.Column('updated_by', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['updated_by'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['updated_by'], ['users.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('organizations',
@@ -66,13 +66,11 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=100), nullable=False),
-    sa.Column('description', sa.Text(), nullable=True),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('start_time', sa.Time(), nullable=False),
     sa.Column('end_time', sa.Time(), nullable=False),
     sa.Column('max_volunteers', sa.Integer(), nullable=True),
     sa.Column('status', sa.String(length=20), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -84,7 +82,6 @@ def upgrade():
     sa.Column('check_out_time', sa.DateTime(), nullable=True),
     sa.Column('beneficiaries_served', sa.Integer(), nullable=True),
     sa.Column('status', sa.String(length=20), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['shift_id'], ['shifts.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['volunteer_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
@@ -96,7 +93,7 @@ def upgrade():
     sa.Column('amount', sa.Float(), nullable=False),
     sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('phone', sa.String(length=15), nullable=False),
-    sa.ForeignKeyConstraint(['shift_roster_id'], ['shifts_roster.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['shift_roster_id'], ['shifts_roster.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['volunteer_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
